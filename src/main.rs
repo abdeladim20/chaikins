@@ -7,7 +7,7 @@ async fn main() {
     let mut is_animating = false;
     loop {
         clear_background(BLACK);
-        if is_mouse_button_pressed(MouseButton::Left) {
+        if is_mouse_button_pressed(MouseButton::Left) && !is_animating {
             control_points.push(mouse_position());
         }
         if is_key_pressed(KeyCode::Enter) && control_points.len() >= 2 {
@@ -21,12 +21,42 @@ async fn main() {
             for i in 0..control_points.len()-1 {
                 draw_line(control_points[i].0, control_points[i].1, control_points[i+1].0, control_points[i+1].1, 1.0, WHITE);
             }
-        } 
+            chaiken(&display_points);
+        }
 
         next_frame().await
     }
 }
 
-// pub fn chaiken(points: Vec<f32, f32>) -> Vec {
+pub fn chaiken(points: &mut Vec<f32, f32>){
 
-// }
+/* 
+    function chaikin(p0, p1) {
+  const percent = 0.25;
+  const dx = p1.x - p0.x;
+  const dy = p1.y - p0.y;
+  return [
+    {
+      x: p0.x + dx * percent,
+      y: p0.y + dy * percent,
+    },
+    {
+      x: p0.x + dx * (1 - percent),
+      y: p0.y + dy * (1 - percent),
+    },
+  ];
+}
+*/
+// let percent = 0.25;
+for i in 0..points.len()-2 {
+
+    let dx = points[i+1].0 - points[i].0;
+    let dy = points[i+1].1 - points[i].1;
+    // points.push(dx *0.25, dy * 0.25);
+    // points.push(dx *0.75, dy * 0.75);
+    points.insert(i+1, (dx *0.75, dy * 0.75));
+    points.insert(i+1, (dx *0.25, dy * 0.25));
+}
+
+
+}
