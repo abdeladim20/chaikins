@@ -36,7 +36,7 @@ async fn main() {
         if is_key_pressed(KeyCode::Escape) {
             break;
         }
-        if is_key_pressed(KeyCode::Space) {
+        if is_key_pressed(KeyCode::Space)  {
             is_animating = false;
             animation_step = 0;
             display_points.clear();
@@ -48,7 +48,9 @@ async fn main() {
             draw_circle(x.0, x.1, 5.0, WHITE);
         }
         if let Some(index) = dragging_point_index {
-            control_points[index] = mouse_position();
+            if control_points.len() > index && !is_animating {
+                control_points[index] = mouse_position();
+            }
         }
         if is_mouse_button_released(MouseButton::Left) {
             dragging_point_index = None;
