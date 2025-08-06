@@ -35,15 +35,17 @@ async fn main() {
         }
 
         if is_animating {
-            if get_time() - last_update_time > 1.0 {
-                if animation_step < 7 {
-                    display_points = chaiken(&display_points);
-                    animation_step += 1;
-                }else {
-                    animation_step = 0;
-                    display_points = control_points.clone();
+            if control_points.len() > 2 {
+                if get_time() - last_update_time > 1.0 {
+                    if animation_step < 7 {
+                        display_points = chaiken(&display_points);
+                        animation_step += 1;
+                    } else {
+                        animation_step = 0;
+                        display_points = control_points.clone();
+                    }
+                    last_update_time = get_time();
                 }
-                last_update_time = get_time();
             }
 
             if display_points.len() > 1 {
@@ -57,7 +59,6 @@ async fn main() {
         next_frame().await
     }
 }
-
 
 pub fn chaiken(points: &[(f32, f32)]) -> Vec<(f32, f32)> {
     if points.len() < 2 {
