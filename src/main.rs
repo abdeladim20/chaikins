@@ -1,4 +1,5 @@
 use macroquad::prelude::*;
+use macroquad::prelude::*;
 
 #[macroquad::main("Chaikin's Algo")]
 async fn main() {
@@ -29,6 +30,8 @@ async fn main() {
         }
         if is_key_pressed(KeyCode::Enter) && control_points.len() >= 2 {
             is_animating = true;
+            animation_step = 0;
+            last_update_time = get_time();
             animation_step = 0;
             last_update_time = get_time();
             display_points = control_points.clone();
