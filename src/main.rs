@@ -7,11 +7,25 @@ async fn main() {
     let mut is_animating = false;
     let mut animation_step = 0;
     let mut last_update_time = 0.0;
+    let mut dragging_point_index: Option<usize> = None;
 
     loop {
         clear_background(BLACK);
         if is_mouse_button_pressed(MouseButton::Left) && !is_animating {
-            control_points.push(mouse_position());
+            let mouse_pos = Vec2::from(mouse_position());
+            let mut clicked_on_point = false;
+
+            for (i, &point) in control_points.iter().enumerate() {
+                // Grab points within a 10-pixel radius
+                if mouse_pos.distance(Vec2::from(point)) < 10.0 {
+                    dragging_point_index = Some(i);
+                    clicked_on_point = true;
+                    break;
+                }
+            }
+            if !clicked_on_point {
+                control_points.push(mouse_position());
+            }
         }
         if is_key_pressed(KeyCode::Enter) && control_points.len() >= 2 {
             is_animating = true;
@@ -32,6 +46,12 @@ async fn main() {
 
         for x in &control_points {
             draw_circle(x.0, x.1, 5.0, WHITE);
+        }
+        if let Some(index) = dragging_point_index {
+            control_points[index] = mouse_position();
+        }
+        if is_mouse_button_released(MouseButton::Left) {
+            dragging_point_index = None;
         }
 
         if is_animating {
