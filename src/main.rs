@@ -19,7 +19,17 @@ async fn main() {
             last_update_time = get_time();
             display_points = control_points.clone();
         }
-        
+        if is_key_pressed(KeyCode::Escape) {
+            break;
+        }
+        if is_key_pressed(KeyCode::Space) {
+            is_animating = false;
+            animation_step = 0;
+            display_points.clear();
+            control_points.clear();
+            last_update_time = 0.0;
+        }
+
         for x in &control_points {
             draw_circle(x.0, x.1, 5.0, WHITE);
         }
@@ -43,8 +53,6 @@ async fn main() {
                     draw_line(p1.0, p1.1, p2.0, p2.1, 2.0, BLUE);
                 }
             }
-            let text = format!("Step: {}", animation_step + 1);
-            draw_text(&text, 20.0, 40.0, 40.0, YELLOW);
         }
         next_frame().await
     }
